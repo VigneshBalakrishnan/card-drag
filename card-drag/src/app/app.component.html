@@ -1,13 +1,21 @@
 <div class="container">
   <h2>Basic Card</h2>
-  <div *ngFor="let a of data" class="card" draggable="true" (dragstart)="onDragStart($event, a)" (dragover)="allowDrop($event)" (drop)="onDrop($event,a)">
-    <div class="card-body">Basic card X
-      <span class="pull-right"><i class="fa fa-times" (click)="click(a)" > close </i></span>
-      <div *ngFor="let b of a" class="card">
-        <div class="card-body">Basic card y
-          <span class="pull-right"><i class="fa fa-times" (click)="click(a)" > close </i></span>
+  <div *ngFor="let a of data" class="card card-content" draggable="true" (dragstart)="onDragStart($event, a)" (dragover)="allowDrop($event)" (drop)="onDrop($event,a)">
+    <div class="card-body">{{a.name}}
+      <span class="pull-right"><i class="fa fa-times" (click)="click(a)" >&times;</i></span>
+      <div *ngFor="let b of a.childData" class="card card-content">
+        <div class="card-body">{{b.name}}
+          <span class="pull-right"><i class="fa fa-times" (click)="click(b)" >&times;</i></span>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<div class="container">
+  <h2>Object Details</h2>
+  <div class="card card-content">
+    {{data | json}}
+  </div>
+</div>
+

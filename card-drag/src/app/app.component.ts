@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DataObjectService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -6,27 +7,28 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'card-drag';
-  data: any = [{ id: 'A', name: 'BV' }, { id: 'B', name: 'TT' }];
-  onDragStart(e: any, data: any) {
-    // SET DATATRANSFER OF DATA
-    // event["dataTransfer"].setData('data', JSON.stringify(data));
-    event['dataTransfer'].setData('data', JSON.stringify(data));
-    console.log(data);
+  constructor(private dataService: DataObjectService) {
+    this.dataService.dataSubject.subscribe(response => {
+      console.log(response);
+      this.data = response;
+    });
+    console.log(this.data);
   }
-  click(a) {
-    this.data = this.data.filter(item => item.id !== a.id);
-    console.log(this.data, a.id);
+  title = 'card-drag';
+  data: any = [];
+
+  onDragStart(event: any, data: any) {
+    event['dataTransfer'].setData('data', JSON.stringify(data));
+  }
+  click(recordRemoved) {
+    this.dataService.onClose(recordRemoved);
   }
   allowDrop(e) {
     e.preventDefault();
   }
-  onDrop(e, a) {
-    e.preventDefault();
-    const data = e.dataTransfer.getData('data');
-    console.log(data, a);
-    this.data = this.data.map(
-      item => (item.id === a.id ? (item.childData = [JSON.parse(data)]) : item)
-    );
+  onDrop(event, parentRecord) {
+    event.preventDefault();
+    const childRecord = JSON.parse(event.dataTransfer.getData('data'));
+    this.dataService.onDropped(parentRecord, childRecord);
   }
 }
