@@ -9,14 +9,15 @@ import { DataObjectService } from './app.service';
 export class AppComponent {
   constructor(private dataService: DataObjectService) {
     this.dataService.dataSubject.subscribe(response => {
-      console.log(response);
       this.data = response;
     });
-    console.log(this.data);
+    this.dataService.copyDisplaySubject.subscribe(response => {
+      this.displayData = { Person: response };
+    });
   }
   title = 'card-drag';
   data: any = [];
-
+  displayData: any;
   onDragStart(event: any, data: any) {
     event['dataTransfer'].setData('data', JSON.stringify(data));
   }
