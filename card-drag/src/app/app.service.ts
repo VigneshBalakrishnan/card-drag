@@ -22,28 +22,8 @@ export class DataObjectService {
   onClose(recordRemoved) {
     this.copyData =
       this.copyData.length > 0
-        ? this.copyData.filter(item => item.ID !== recordRemoved.ID).map(
-            items =>
-              items.TeamOf
-                ? {
-                    ...items,
-                    TeamOf: items.TeamOf.filter(
-                      data => data.Leader !== recordRemoved.ID
-                    )
-                  }
-                : { ...items }
-          )
-        : this.data.filter(item => item.ID !== recordRemoved.ID).map(
-            items =>
-              items.childData
-                ? {
-                    ...items,
-                    TeamOf: items.childData.filter(
-                      data => data.ID !== recordRemoved.ID
-                    )
-                  }
-                : { ...items }
-          );
+        ? this.copyData.filter(item => item.ID !== recordRemoved.ID)
+        : this.data.filter(item => item.ID !== recordRemoved.ID);
     this.data = this.data.filter(item => item.ID !== recordRemoved.ID).map(
       items =>
         items.childData
